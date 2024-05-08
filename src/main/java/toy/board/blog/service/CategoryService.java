@@ -4,11 +4,15 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import toy.board.blog.dto.request.ChangeSequenceRequest;
 import toy.board.blog.dto.request.CreateCategoryRequest;
+import toy.board.blog.dto.request.IdSequenceDto;
 import toy.board.blog.repository.CategoryRepository;
 import toy.board.entity.Category;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -19,7 +23,7 @@ public class CategoryService {
     public Category createCategory(CreateCategoryRequest request) {
         Category parentCategory = getParentCategory(request);
         Category category = request.toCategory(parentCategory);
-        category.setSequence(getLastSequence(parentCategory));
+        category.setSequenceBy(getLastSequence(parentCategory));
         return categoryRepository.save(category);
 
 
@@ -44,5 +48,28 @@ public class CategoryService {
 
     }
 
+
+    public void changeSequence(ChangeSequenceRequest request) {
+        List<IdSequenceDto> idSequenceDtoList = request.data();
+
+        Map<Integer, Integer> idSequenceMap = getIdSequenceMap(idSequenceDtoList);
+        List<Category> categoryList = getMatchedCateogryList(idSequenceDtoList);
+
+        categoryList.forEach(category -> {
+            Integer sequence = idSequenceMap.get(category.getId());
+            category.setSequence(sequence);
+        });
+
+        categoryRepository.saveAll(categoryList); //Todo: 속도 문제가 발생할 수 있을까?
+    }
+
+    private static Map<Integer, Integer> getIdSequenceMap(List<IdSequenceDto> idSequenceDtoList) {
+        return idSequenceDtoList.stream().collect(Collectors.toMap(IdSequenceDto::id, IdSequenceDto::sequence));
+    }
+
+    private List<Category> getMatchedCateogryList(List<IdSequenceDto> idSequenceDtoList) {
+        List<Integer> idList = idSequenceDtoList.stream().map(IdSequenceDto::id).toList();
+        return categoryRepository.findAllById(idList);
+    }
 
 }

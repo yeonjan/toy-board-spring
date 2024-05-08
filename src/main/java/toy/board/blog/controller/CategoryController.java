@@ -3,10 +3,8 @@ package toy.board.blog.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import toy.board.blog.dto.request.ChangeSequenceRequest;
 import toy.board.blog.dto.request.CreateCategoryRequest;
 import toy.board.blog.dto.response.CreateCategoryResponse;
 import toy.board.blog.service.CategoryService;
@@ -25,4 +23,11 @@ public class CategoryController {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("/sequence")
+    public ResponseEntity<Void> updateCategorySequence(@Valid @RequestBody ChangeSequenceRequest request) {
+        categoryService.changeSequence(request);
+        return ResponseEntity.ok().build();
+
+
+    }
 }

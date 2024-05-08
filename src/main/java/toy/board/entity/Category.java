@@ -1,10 +1,7 @@
 package toy.board.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import toy.board.entity.common.BaseEntity;
 
@@ -27,6 +24,7 @@ public class Category extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Setter
     @Column(name = "sequence", nullable = false)
     private Integer sequence;
 
@@ -42,7 +40,7 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "parent")
     private List<Category> child = new ArrayList<>();
 
-    public void setSequence(Integer lastSequence) {
+    public void setSequenceBy(Integer lastSequence) {
         this.sequence = lastSequence + 1;
     }
 }
