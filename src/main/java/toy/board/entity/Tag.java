@@ -14,10 +14,9 @@ public class Tag extends BaseEntity {
     @jakarta.persistence.Id
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

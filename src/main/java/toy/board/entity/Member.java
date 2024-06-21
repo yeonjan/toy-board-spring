@@ -14,13 +14,11 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(name = "nickname", nullable = false)
+    @Column(nullable = false)
     private String nickname;
 
-    @Column(name = "email")
     private String email;
 
 

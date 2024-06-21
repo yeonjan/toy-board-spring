@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
 import toy.board.entity.common.BaseEntity;
+import toy.board.vo.Content;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -13,19 +14,14 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
-    @Column(nullable = false)
-    private String title;
-
-    @Column(name = "content")
-    private String content;
+    private Content content;
 
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member writer;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

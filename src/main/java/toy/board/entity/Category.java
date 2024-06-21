@@ -21,11 +21,11 @@ public class Category extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column( nullable = false)
     private String name;
 
     @Setter
-    @Column(name = "sequence", nullable = false)
+    @Column(nullable = false)
     private Integer sequence;
 
     @CreatedBy
