@@ -8,7 +8,7 @@ import toy.board.blog.dto.request.ChangeSequenceRequest;
 import toy.board.blog.dto.request.CreateCategoryRequest;
 import toy.board.blog.dto.request.IdSequenceDto;
 import toy.board.blog.repository.CategoryRepository;
-import toy.board.entity.Category;
+import toy.board.model.entity.Category;
 
 import java.util.List;
 import java.util.Map;

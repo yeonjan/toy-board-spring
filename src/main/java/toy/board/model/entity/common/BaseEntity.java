@@ -1,4 +1,4 @@
-package toy.board.entity.common;
+package toy.board.model.entity.common;
 
 import jakarta.persistence.*;
 import lombok.Getter;

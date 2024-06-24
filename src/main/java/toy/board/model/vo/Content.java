@@ -1,4 +1,4 @@
-package toy.board.vo;
+package toy.board.model.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

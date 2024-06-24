@@ -1,11 +1,11 @@
-package toy.board.entity;
+package toy.board.model.entity;
 
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
-import toy.board.entity.common.BaseEntity;
-import toy.board.vo.Content;
+import toy.board.model.entity.common.BaseEntity;
+import toy.board.model.vo.Content;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 

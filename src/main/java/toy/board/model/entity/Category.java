@@ -1,9 +1,9 @@
-package toy.board.entity;
+package toy.board.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
-import toy.board.entity.common.BaseEntity;
+import toy.board.model.entity.common.BaseEntity;
 
 import java.util.ArrayList;
 import java.util.List;

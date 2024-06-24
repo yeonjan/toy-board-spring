@@ -8,7 +8,7 @@ import toy.board.blog.dto.request.ChangeSequenceRequest;
 import toy.board.blog.dto.request.CreateCategoryRequest;
 import toy.board.blog.dto.response.CreateCategoryResponse;
 import toy.board.blog.service.CategoryService;
-import toy.board.entity.Category;
+import toy.board.model.entity.Category;
 
 @RestController
 @RequiredArgsConstructor

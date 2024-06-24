@@ -1,11 +1,11 @@
-package toy.board.entity;
+package toy.board.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
-import toy.board.entity.common.BaseEntity;
+import toy.board.model.entity.common.BaseEntity;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 

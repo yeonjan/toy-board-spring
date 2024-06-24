@@ -1,6 +1,6 @@
 package toy.board.blog.dto.response;
 
-import toy.board.entity.Category;
+import toy.board.model.entity.Category;
 
 public record CreateCategoryResponse(Integer id, String name, Integer sequence) {
 
