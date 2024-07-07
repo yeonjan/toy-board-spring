@@ -4,13 +4,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.Getter;
+import lombok.*;
 import toy.board.model.entity.common.BaseEntity;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(access = AccessLevel.PRIVATE)
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -20,6 +23,14 @@ public class Member extends BaseEntity {
     private String nickname;
 
     private String email;
+
+
+    public static Member of(String nickname, String email) {
+        return Member.builder()
+                .nickname(nickname)
+                .email(email)
+                .build();
+    }
 
 
 }
