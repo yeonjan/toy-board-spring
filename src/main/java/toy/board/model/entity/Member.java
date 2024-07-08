@@ -32,5 +32,10 @@ public class Member extends BaseEntity {
                 .build();
     }
 
+    public void updateUserInfo(String nickname, String email) {
+        this.nickname = nickname;
+        this.email = email;
+    }
+
 
 }

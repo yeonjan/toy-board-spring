@@ -1,5 +1,6 @@
 package toy.board.member;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -12,15 +13,24 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-
-    public Member saveLoginMember(OidcUser principal) {
+    @Transactional
+    public Member saveOrUpdate(OidcUser principal) {
         OidcUserInfo userInfo = principal.getUserInfo();
-        Member member = Member.of(userInfo.getFullName(), userInfo.getEmail());
+        String email = userInfo.getEmail();
+        String nickname = userInfo.getFullName();
 
-        return memberRepository
-                .findByEmail(member.getEmail())
-                .orElseGet(() -> memberRepository.save(member));
+        return memberRepository.findByEmail(email)
+                .map(existingMember -> updateExistingMember(existingMember, nickname, email))
+                .orElseGet(() -> createNewMember(nickname, email));
+    }
 
+    private Member updateExistingMember(Member existingMember, String nickname, String email) {
+        existingMember.updateUserInfo(nickname, email);
+        return memberRepository.save(existingMember);
+    }
 
+    private Member createNewMember(String nickname, String email) {
+        Member newMember = Member.of(nickname, email);
+        return memberRepository.save(newMember);
     }
 }

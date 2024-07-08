@@ -1,24 +1,23 @@
 package toy.board.global.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.SecurityFilterChain;
-import toy.board.member.MemberService;
-
-import java.util.Set;
+import toy.board.global.CustomOidcUserService;
+import toy.board.global.handler.LoginSuccessHandler;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
+    private final LoginSuccessHandler loginSuccessHandler;
+    private final CustomOidcUserService customOidcUserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -27,9 +26,9 @@ public class SecurityConfig {
                         oauth2
                                 .userInfoEndpoint(userInfo ->
                                         userInfo
-                                                .oidcUserService(this.oidcUserService())
+                                                .oidcUserService(customOidcUserService)
                                 )
-                                .defaultSuccessUrl("/api/login/success"));
+                                .successHandler(loginSuccessHandler));
 
         http
                 .authorizeHttpRequests(authorize -> authorize
@@ -41,15 +40,8 @@ public class SecurityConfig {
         return http.build();
     }
 
-    //TODO : CustomOidcUserService 만들어서 loadUser 후 save or update까지 진행하기. + cookie나 스토리지에 accessToken 넣기
-    //TODO : defaultSuccessUrl 홈으로 변경하기
-    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
-        final OidcUserService delegate = new OidcUserService();
-        final MemberService memberService;
-        delegate.setAccessibleScopes(Set.of("https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"));
+    //TODO : cookie나 스토리지에 accessToken 넣기
 
-        return delegate;
-    }
 
 
 }
