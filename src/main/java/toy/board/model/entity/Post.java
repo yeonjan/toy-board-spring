@@ -18,6 +18,9 @@ public class Post extends BaseEntity {
 
     private Content content;
 
+    @Column(name = "is_read", nullable = false)
+    private boolean isRead;
+
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
