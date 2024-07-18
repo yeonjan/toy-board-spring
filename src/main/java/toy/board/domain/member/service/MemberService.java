@@ -1,10 +1,11 @@
-package toy.board.member;
+package toy.board.domain.member.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
+import toy.board.domain.member.repository.MemberRepository;
 import toy.board.model.entity.Member;
 
 @Service

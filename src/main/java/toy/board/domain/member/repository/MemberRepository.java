@@ -1,4 +1,4 @@
-package toy.board.member;
+package toy.board.domain.member.repository;
 
 
 import lombok.RequiredArgsConstructor;

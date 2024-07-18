@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import toy.board.global.service.JwtService;
-import toy.board.member.MemberService;
+import toy.board.domain.member.service.MemberService;
 import toy.board.model.entity.Member;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package toy.board.blog.dto.response;
+package toy.board.domain.category.dto.response;
 
 import toy.board.model.entity.Category;
 

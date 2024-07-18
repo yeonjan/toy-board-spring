@@ -1,4 +1,4 @@
-package toy.board.blog.repository;
+package toy.board.domain.category.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

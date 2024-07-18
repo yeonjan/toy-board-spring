@@ -1,13 +1,13 @@
-package toy.board.blog.service;
+package toy.board.domain.category.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import toy.board.blog.dto.request.ChangeSequenceRequest;
-import toy.board.blog.dto.request.CreateCategoryRequest;
-import toy.board.blog.dto.request.IdSequenceDto;
-import toy.board.blog.repository.CategoryRepository;
+import toy.board.domain.category.dto.request.ChangeSequenceRequest;
+import toy.board.domain.category.dto.request.CreateCategoryRequest;
+import toy.board.domain.category.dto.request.IdSequenceDto;
+import toy.board.domain.category.repository.CategoryRepository;
 import toy.board.model.entity.Category;
 
 import java.util.List;

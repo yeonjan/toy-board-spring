@@ -1,4 +1,4 @@
-package toy.board.blog.dto.request;
+package toy.board.domain.category.dto.request;
 
 import java.util.List;
 
