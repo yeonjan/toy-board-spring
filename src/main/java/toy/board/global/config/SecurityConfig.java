@@ -5,14 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import toy.board.global.CustomOidcUserService;
-import toy.board.global.handler.LoginSuccessHandler;
-import toy.board.global.service.JwtService;
+import toy.board.global.auth.jwt.filter.JwtAuthenticationFilter;
+import toy.board.global.auth.oauth.handler.LoginSuccessHandler;
+import toy.board.global.auth.oauth.service.CustomOidcUserService;
 
 
 @Configuration
@@ -21,7 +18,7 @@ import toy.board.global.service.JwtService;
 public class SecurityConfig {
     private final LoginSuccessHandler loginSuccessHandler;
     private final CustomOidcUserService customOidcUserService;
-    private final JwtService jwtService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,17 +26,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login", "/oauth2/**", "/public/**").permitAll()
                         .anyRequest().authenticated()
+
                 )
                 .oauth2Login(oauth2 ->
                         oauth2
                                 .userInfoEndpoint(userInfo -> userInfo.oidcUserService(customOidcUserService))
                                 .successHandler(loginSuccessHandler))
 
-                .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
-                        .jwt(jwt -> jwt
-                                .decoder(jwtDecoder())
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                );
+                .addFilterBefore(jwtAuthenticationFilter, OAuth2AuthorizationRequestRedirectFilter.class);
 //                .exceptionHandling(exceptionHandling ->
 //                        exceptionHandling
 //                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
@@ -47,22 +41,6 @@ public class SecurityConfig {
 //                );
 
         return http.build();
-    }
-
-
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withPublicKey(jwtService.getPublicKey()).build();
-    }
-
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-
-        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
-        return jwtAuthenticationConverter;
     }
 
 
