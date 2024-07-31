@@ -1,9 +1,6 @@
 package toy.board.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import toy.board.model.entity.common.BaseEntity;
 
@@ -22,19 +19,35 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String nickname;
 
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String picture;
 
-    public static Member of(String nickname, String email) {
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+
+    public static Member of(String nickname, String email, String picture) {
         return Member.builder()
                 .nickname(nickname)
                 .email(email)
+                .picture(picture)
+                .role(Role.USER)
                 .build();
     }
 
-    public void updateUserInfo(String nickname, String email) {
-        this.nickname = nickname;
-        this.email = email;
+    public void updateUserInfo(Member newMember) {
+        this.nickname = newMember.getNickname();
+        this.email = newMember.getEmail();
+        this.picture = newMember.getPicture();
+        this.role = newMember.getRole();
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
     }
 
 
