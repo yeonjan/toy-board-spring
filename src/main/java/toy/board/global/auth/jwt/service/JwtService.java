@@ -1,12 +1,14 @@
 package toy.board.global.auth.jwt.service;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.SignatureAlgorithm;
+import io.jsonwebtoken.security.MacAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import toy.board.model.entity.Member;
 
-import java.security.KeyPair;
-import java.security.interfaces.RSAPublicKey;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -15,9 +17,10 @@ public class JwtService {
 
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000;
     //TODO: jwt decoder 이용한 인증 부분 구현하기
-    private final SignatureAlgorithm alg = Jwts.SIG.RS512;
-    private final KeyPair pair = alg.keyPair().build();
+    private final MacAlgorithm alg = Jwts.SIG.HS256;
 
+    @Value("${jwt.secret_key}")
+    private String secretKey;
 
     public String getAccessToken(String subject) {
         return generateToken(subject, ACCESS_TOKEN_EXPIRE_TIME);
@@ -31,7 +34,7 @@ public class JwtService {
 
     private String generateToken(String subject, long expirationTime) {
         return Jwts.builder()
-                .signWith(pair.getPrivate(), alg)
+                .signWith(convertSecretKey(secretKey), alg)
                 .subject(subject)
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .notBefore(new Date())
@@ -57,7 +60,7 @@ public class JwtService {
     private Claims extractAllClaims(String token) {
         try {
             return Jwts.parser()
-                    .verifyWith(pair.getPublic())
+                    .verifyWith(convertSecretKey(secretKey))
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
@@ -77,8 +80,9 @@ public class JwtService {
 
     }
 
-    public RSAPublicKey getPublicKey() {
-        return (RSAPublicKey) pair.getPublic();
+    private static SecretKey convertSecretKey(String secretKey) {
+        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
+        return new SecretKeySpec(decodedKey, 0, decodedKey.length, "HmacSHA256");
     }
 
 
