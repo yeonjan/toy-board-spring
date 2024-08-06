@@ -8,7 +8,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-public class PostTag extends BaseEntity {
+public class PostingTag extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
@@ -20,6 +20,6 @@ public class PostTag extends BaseEntity {
     private Tag tag;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "posting_id")
+    private Posting post;
 }

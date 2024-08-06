@@ -20,6 +20,10 @@ import java.util.stream.Collectors;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
+    public Category getCategory(Integer id) {
+        return categoryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
     public Category createCategory(CreateCategoryRequest request) {
         Category parentCategory = getParentCategory(request);
         Category category = request.toCategory(parentCategory);
