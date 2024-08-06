@@ -17,7 +17,7 @@ public class MemberRepository {
     }
 
     public Optional<Member> findById(Integer id) {
-        return memberJpaRepository.findById(Long.valueOf(id));
+        return memberJpaRepository.findById(id);
     }
 
     public Optional<Member> findByEmail(String email) {

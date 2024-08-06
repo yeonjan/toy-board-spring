@@ -6,7 +6,7 @@ import toy.board.model.entity.Member;
 import java.util.Optional;
 
 
-public interface MemberJpaRepository extends JpaRepository<Member, Long> {
+public interface MemberJpaRepository extends JpaRepository<Member, Integer> {
 
     Optional<Member> findByEmail(String email);
 
