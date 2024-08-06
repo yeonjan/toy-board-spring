@@ -5,8 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import toy.board.global.auth.jwt.filter.JwtAuthenticationFilter;
 import toy.board.global.auth.oauth.handler.LoginSuccessHandler;
 import toy.board.global.auth.oauth.service.CustomOidcUserService;
@@ -23,6 +24,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/login", "/oauth2/**", "/public/**").permitAll()
                         .anyRequest().authenticated()
@@ -33,7 +35,7 @@ public class SecurityConfig {
                                 .userInfoEndpoint(userInfo -> userInfo.oidcUserService(customOidcUserService))
                                 .successHandler(loginSuccessHandler))
 
-                .addFilterBefore(jwtAuthenticationFilter, OAuth2AuthorizationRequestRedirectFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 //                .exceptionHandling(exceptionHandling ->
 //                        exceptionHandling
 //                                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
