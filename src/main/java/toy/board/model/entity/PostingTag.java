@@ -11,7 +11,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class PostingTag extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
 

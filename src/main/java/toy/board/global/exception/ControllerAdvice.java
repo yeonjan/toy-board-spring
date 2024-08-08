@@ -1,10 +1,10 @@
 package toy.board.global.exception;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import toy.board.global.exception.custom.EntityNotFoundException;
 
 @RestControllerAdvice
 public class ControllerAdvice {
@@ -21,9 +21,8 @@ public class ControllerAdvice {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleException(EntityNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("해당 데이터를 찾을 수 없습니다.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
-
 
 
 }

@@ -31,7 +31,7 @@ public class Category extends BaseEntity {
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member owner;
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")

@@ -5,6 +5,7 @@ import jakarta.persistence.Embeddable;
 import lombok.Setter;
 
 @Embeddable
+@Setter
 public class Content {
     @Column(nullable = false)
     private String title;
@@ -25,5 +26,6 @@ public class Content {
         content.writer = writer;
         return content;
     }
+
 
 }

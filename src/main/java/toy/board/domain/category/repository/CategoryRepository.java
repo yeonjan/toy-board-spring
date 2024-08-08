@@ -1,10 +1,11 @@
 package toy.board.domain.category.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import toy.board.model.entity.Category;
+import toy.board.model.entity.Member;
 
+import java.util.Optional;
 
-@Repository
-public interface CategoryRepository extends JpaRepository<Category, Integer> {
+public interface CategoryRepository {
+    Optional<Category> findByIdAndMember(Integer categoryId, Member member);
+    Category save(Category category);
 }

@@ -42,5 +42,10 @@ public class Posting extends BaseEntity {
         return posting;
     }
 
+    public void changeCategory(Category category) {
+        this.category = category;
+    }
+
+
 
 }
