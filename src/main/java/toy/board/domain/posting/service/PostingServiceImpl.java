@@ -3,7 +3,7 @@ package toy.board.domain.posting.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import toy.board.domain.category.service.CategoryService;
+import toy.board.domain.category.service.CategoryServiceImpl;
 import toy.board.domain.common.service.WebScrapingService;
 import toy.board.domain.posting.dto.request.PatchPostingRequest;
 import toy.board.domain.posting.dto.request.SavePostingRequest;
@@ -23,7 +23,7 @@ import java.util.List;
 public class PostingServiceImpl implements PostingService {
 
     private final PostingRepository postingRepository;
-    private final CategoryService categoryService;
+    private final CategoryServiceImpl categoryService;
     private final WebScrapingService webScrapingService;
 
     @Override
