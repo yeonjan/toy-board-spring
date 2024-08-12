@@ -13,5 +13,4 @@ public interface CategoryJpaRepository extends JpaRepository<Category, Integer> 
 
     List<Category> findAllByIdIn(List<Integer> ids);
 
-    void saveAll(List<Category> categories);
 }
