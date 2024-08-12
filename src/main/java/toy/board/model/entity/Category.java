@@ -12,7 +12,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Category extends BaseEntity {
@@ -21,7 +20,7 @@ public class Category extends BaseEntity {
     @Column(name = "id")
     private Integer id;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @Setter
@@ -40,7 +39,16 @@ public class Category extends BaseEntity {
     @OneToMany(mappedBy = "parent")
     private List<Category> child = new ArrayList<>();
 
-    public void setSequenceBy(Integer lastSequence) {
-        this.sequence = lastSequence + 1;
+    private Integer getLastChildSequence() {
+        return child.size() - 1;
+    }
+
+    public static Category of(Member member, Category parent, String name) {
+        Category category = new Category();
+        category.member = member;
+        category.parent = parent;
+        category.name = name;
+        category.sequence = parent != null ? parent.getLastChildSequence() + 1 : 0;
+        return category;
     }
 }

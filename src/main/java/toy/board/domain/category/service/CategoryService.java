@@ -8,7 +8,7 @@ import toy.board.model.entity.Member;
 public interface CategoryService {
     Category getCategory(Member member, Integer id);
 
-    Category createCategory(CreateCategoryRequest request);
+    Category createCategory(Member member,CreateCategoryRequest request);
 
     void changeSequence(ChangeSequenceRequest request);
 }

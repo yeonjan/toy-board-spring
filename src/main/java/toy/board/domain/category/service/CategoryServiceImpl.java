@@ -7,6 +7,8 @@ import toy.board.domain.category.dto.request.ChangeSequenceRequest;
 import toy.board.domain.category.dto.request.CreateCategoryRequest;
 import toy.board.domain.category.dto.request.IdSequenceDto;
 import toy.board.domain.category.repository.CategoryRepository;
+import toy.board.global.exception.ErrorCode;
+import toy.board.global.exception.custom.BusinessException;
 import toy.board.global.exception.custom.EntityNotFoundException;
 import toy.board.model.entity.Category;
 import toy.board.model.entity.Member;
@@ -27,33 +29,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category createCategory(CreateCategoryRequest request) {
-        Category parentCategory = getParentCategory(request);
-        Category category = request.toCategory(parentCategory);
-        category.setSequenceBy(getLastSequence(parentCategory));
+    public Category createCategory(Member member, CreateCategoryRequest request) {
+        Category parentCategory = getParentCategory(member, request.parentId());
+        if (parentCategory.getParent() != null) throw new BusinessException(ErrorCode.CATEGORY_DEPTH_EXCEEDED);
+        Category category = Category.of(member, parentCategory, request.name());
         return categoryRepository.save(category);
-
-
     }
 
-    private Category getParentCategory(CreateCategoryRequest request) {
-        if (request.parentId() == null) {
-            return null;
-        }
-        return categoryRepository.findById(request.parentId()).orElseThrow(() -> new EntityNotFoundException("Category", request.parentId()));
-    }
-
-    private Integer getLastSequence(Category parent) {
-        if (parent == null) {
-            return 0;
-        }
-        List<Category> child = parent.getChild();
-        return child.stream()
-                .map(Category::getSequence)
-                .max(Integer::compareTo)
-                .orElse(0);
-
-    }
 
     @Override
     public void changeSequence(ChangeSequenceRequest request) {
@@ -69,6 +51,11 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryRepository.saveAll(categoryList); //Todo: 속도 문제가 발생할 수 있을까?
     }
+
+    private Category getParentCategory(Member member, Integer parentId) {
+        return parentId != null ? getCategory(member, parentId) : null;
+    }
+
 
     private static Map<Integer, Integer> getIdSequenceMap(List<IdSequenceDto> idSequenceDtoList) {
         return idSequenceDtoList.stream().collect(Collectors.toMap(IdSequenceDto::id, IdSequenceDto::sequence));
