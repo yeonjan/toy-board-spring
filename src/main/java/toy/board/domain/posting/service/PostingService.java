@@ -17,4 +17,6 @@ public interface PostingService {
     Integer patchPosting(Member member, PatchPostingRequest requestDto,Integer postingId);
 
     Integer toggleReadStatus(Member member, Integer postingId);
+
+    Integer deletePosting(Member member, Integer postingId);
 }

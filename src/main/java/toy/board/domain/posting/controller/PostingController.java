@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import toy.board.domain.posting.dto.request.PatchPostingRequest;
 import toy.board.domain.posting.dto.request.SavePostingRequest;
 import toy.board.domain.posting.service.PostingService;
+import toy.board.global.response.CommonDeleteResponse;
+import toy.board.global.response.CommonPatchResponse;
 import toy.board.global.response.CommonPostResponse;
 import toy.board.model.entity.Member;
 
@@ -30,16 +32,23 @@ public class PostingController {
     }
 
     @PatchMapping("/{postingId}")
-    public ResponseEntity<CommonPostResponse> patchPosting(@AuthenticationPrincipal Member member, @RequestBody @Valid PatchPostingRequest requestDto, @PathVariable("postingId") Integer postingId) {
+    public ResponseEntity<CommonPatchResponse> patchPosting(@AuthenticationPrincipal Member member, @RequestBody @Valid PatchPostingRequest requestDto, @PathVariable("postingId") Integer postingId) {
         Integer id = postingService.patchPosting(member, requestDto, postingId);
-        CommonPostResponse response = new CommonPostResponse(id, LocalDateTime.now());
+        CommonPatchResponse response = new CommonPatchResponse(id, LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping("/{postingId}/read-status")
-    public ResponseEntity<CommonPostResponse> toggleReadStatus(@AuthenticationPrincipal Member member, @PathVariable("postingId") Integer postingId) {
+    public ResponseEntity<CommonPatchResponse> toggleReadStatus(@AuthenticationPrincipal Member member, @PathVariable("postingId") Integer postingId) {
         Integer id = postingService.toggleReadStatus(member, postingId);
-        CommonPostResponse response = new CommonPostResponse(id, LocalDateTime.now());
+        CommonPatchResponse response = new CommonPatchResponse(id, LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @DeleteMapping("/{postingId}")
+    public ResponseEntity<CommonDeleteResponse> deletePosting(@AuthenticationPrincipal Member member, @PathVariable("postingId") Integer postingId) {
+        Integer id = postingService.deletePosting(member, postingId);
+        CommonDeleteResponse response = new CommonDeleteResponse(id, LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

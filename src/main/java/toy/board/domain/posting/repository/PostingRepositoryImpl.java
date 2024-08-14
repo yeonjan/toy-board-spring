@@ -22,5 +22,13 @@ public class PostingRepositoryImpl implements PostingRepository {
     @Override
     public Posting save(Posting posting) {
         return postingJpaRepository.save(posting);
+
     }
+
+    @Override
+    public void delete(Posting posting) {
+        postingJpaRepository.delete(posting);
+    }
+
+
 }

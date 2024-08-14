@@ -11,5 +11,7 @@ public interface PostingRepository {
 
     Posting save(Posting posting);
 
+    void delete(Posting posting);
+
 
 }

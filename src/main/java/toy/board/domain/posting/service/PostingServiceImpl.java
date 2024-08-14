@@ -72,6 +72,13 @@ public class PostingServiceImpl implements PostingService {
         return posting.getId();
     }
 
+    @Override
+    public Integer deletePosting(Member member, Integer postingId) {
+        Posting posting = getPosting(member, postingId);
+        postingRepository.delete(posting);
+        return posting.getId();
+    }
+
     public Posting getPosting(Member member, Integer postingId) {
         return postingRepository.findByIdAndMember(postingId, member).orElseThrow(() -> new EntityNotFoundException("Posting", postingId));
     }
