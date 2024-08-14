@@ -65,6 +65,13 @@ public class PostingServiceImpl implements PostingService {
         return posting.getId();
     }
 
+    @Override
+    public Integer toggleReadStatus(Member member, Integer postingId) {
+        Posting posting = getPosting(member, postingId);
+        posting.toggleIsRead();
+        return posting.getId();
+    }
+
     public Posting getPosting(Member member, Integer postingId) {
         return postingRepository.findByIdAndMember(postingId, member).orElseThrow(() -> new EntityNotFoundException("Posting", postingId));
     }

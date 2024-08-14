@@ -31,8 +31,16 @@ public class PostingController {
 
     @PatchMapping("/{postingId}")
     public ResponseEntity<CommonPostResponse> patchPosting(@AuthenticationPrincipal Member member, @RequestBody @Valid PatchPostingRequest requestDto, @PathVariable("postingId") Integer postingId) {
-        Integer id = postingService.patchPosting(member, requestDto,postingId);
+        Integer id = postingService.patchPosting(member, requestDto, postingId);
         CommonPostResponse response = new CommonPostResponse(id, LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    @PatchMapping("/{postingId}/read-status")
+    public ResponseEntity<CommonPostResponse> toggleReadStatus(@AuthenticationPrincipal Member member, @PathVariable("postingId") Integer postingId) {
+        Integer id = postingService.toggleReadStatus(member, postingId);
+        CommonPostResponse response = new CommonPostResponse(id, LocalDateTime.now());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

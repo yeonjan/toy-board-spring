@@ -46,6 +46,9 @@ public class Posting extends BaseEntity {
         this.category = category;
     }
 
+    public void toggleIsRead() {
+        this.isRead = !this.isRead;
+    }
 
 
 }
