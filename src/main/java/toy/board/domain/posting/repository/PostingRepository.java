@@ -1,5 +1,8 @@
 package toy.board.domain.posting.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import toy.board.domain.posting.dto.request.PostingSearchCriteria;
 import toy.board.model.entity.Member;
 import toy.board.model.entity.Posting;
 
@@ -13,5 +16,6 @@ public interface PostingRepository {
 
     void delete(Posting posting);
 
+    Page<Posting> findAllByCriteria(Member member, Pageable pageable, PostingSearchCriteria criteria);
 
 }

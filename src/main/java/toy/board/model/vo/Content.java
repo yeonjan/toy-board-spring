@@ -2,10 +2,12 @@ package toy.board.model.vo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
 import lombok.Setter;
 
 @Embeddable
 @Setter
+@Getter
 public class Content {
     @Column(nullable = false)
     private String title;

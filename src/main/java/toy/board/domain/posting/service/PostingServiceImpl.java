@@ -2,10 +2,14 @@ package toy.board.domain.posting.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import toy.board.domain.category.service.CategoryServiceImpl;
 import toy.board.domain.common.service.WebScrapingService;
 import toy.board.domain.posting.dto.request.PatchPostingRequest;
+import toy.board.domain.posting.dto.request.PostingSearchCriteria;
 import toy.board.domain.posting.dto.request.SavePostingRequest;
 import toy.board.domain.posting.dto.response.PostingResponse;
 import toy.board.domain.posting.repository.PostingRepository;
@@ -14,8 +18,6 @@ import toy.board.model.entity.Category;
 import toy.board.model.entity.Member;
 import toy.board.model.entity.Posting;
 import toy.board.model.vo.Content;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -26,9 +28,13 @@ public class PostingServiceImpl implements PostingService {
     private final CategoryServiceImpl categoryService;
     private final WebScrapingService webScrapingService;
 
+
     @Override
-    public List<PostingResponse> getPostingList(Member member, Integer categoryId, boolean isRead) {
-        return List.of();
+    public Page<PostingResponse> getPostingList(Member member, int page, Boolean isRead, Integer categoryId) {
+        PostingSearchCriteria criteria = new PostingSearchCriteria(isRead, categoryId);
+        Pageable pageable = PageRequest.of(page, 9);
+        Page<Posting> pageResponse = postingRepository.findAllByCriteria(member, pageable, criteria);
+        return pageResponse.map(PostingResponse::new);
     }
 
     @Override

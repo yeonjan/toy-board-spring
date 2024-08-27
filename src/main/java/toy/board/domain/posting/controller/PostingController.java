@@ -2,12 +2,14 @@ package toy.board.domain.posting.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import toy.board.domain.posting.dto.request.PatchPostingRequest;
 import toy.board.domain.posting.dto.request.SavePostingRequest;
+import toy.board.domain.posting.dto.response.PostingResponse;
 import toy.board.domain.posting.service.PostingService;
 import toy.board.global.response.CommonDeleteResponse;
 import toy.board.global.response.CommonPatchResponse;
@@ -50,6 +52,13 @@ public class PostingController {
         Integer id = postingService.deletePosting(member, postingId);
         CommonDeleteResponse response = new CommonDeleteResponse(id, LocalDateTime.now());
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping()
+    public ResponseEntity<Page<PostingResponse>> getPostings(@AuthenticationPrincipal Member member, @RequestParam(required = false, defaultValue = "0", name = "page") int page,
+                                                             @RequestParam(name = "isRead") Boolean isRead, @RequestParam(name = "categoryId") Integer categoryId) {
+        Page<PostingResponse> postingList = postingService.getPostingList(member, page, isRead, categoryId);
+        return ResponseEntity.status(HttpStatus.OK).body(postingList);
     }
 
 }

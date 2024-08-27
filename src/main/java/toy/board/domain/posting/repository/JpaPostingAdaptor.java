@@ -1,7 +1,11 @@
 package toy.board.domain.posting.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import toy.board.domain.posting.dto.request.PostingSearchCriteria;
+import toy.board.domain.posting.repository.query.PostingQueryRepository;
 import toy.board.model.entity.Member;
 import toy.board.model.entity.Posting;
 
@@ -9,9 +13,10 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class PostingRepositoryImpl implements PostingRepository {
+public class JpaPostingAdaptor implements PostingRepository {
 
     private final PostingJpaRepository postingJpaRepository;
+    private final PostingQueryRepository postingQueryRepository;
 
 
     @Override
@@ -28,6 +33,11 @@ public class PostingRepositoryImpl implements PostingRepository {
     @Override
     public void delete(Posting posting) {
         postingJpaRepository.delete(posting);
+    }
+
+    @Override
+    public Page<Posting> findAllByCriteria(Member member, Pageable pageable, PostingSearchCriteria criteria) {
+        return postingQueryRepository.findAllByMemberAndCriteria(member,pageable,criteria);
     }
 
 
