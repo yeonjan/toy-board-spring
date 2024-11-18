@@ -11,6 +11,8 @@ public interface CategoryRepository {
 
     List<Category> findAllByIdIn(List<Integer> idList);
 
+    List<Category> findWithChildByMember(Member member);
+
     Optional<Category> findByIdAndMember(Integer categoryId, Member member);
 
     Category save(Category category);

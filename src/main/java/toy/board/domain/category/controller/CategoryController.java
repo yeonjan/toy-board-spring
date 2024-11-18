@@ -8,9 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import toy.board.domain.category.dto.request.ChangeSequenceRequest;
 import toy.board.domain.category.dto.request.CreateCategoryRequest;
 import toy.board.domain.category.dto.response.CreateCategoryResponse;
+import toy.board.domain.category.dto.response.CategoriesResponse;
 import toy.board.domain.category.service.CategoryService;
 import toy.board.model.entity.Category;
 import toy.board.model.entity.Member;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +23,7 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CreateCategoryResponse> CreateCategory(@AuthenticationPrincipal Member member, @Valid @RequestBody CreateCategoryRequest request) {
-        Category category = categoryService.createCategory(member,request);
+        Category category = categoryService.createCategory(member, request);
         CreateCategoryResponse response = CreateCategoryResponse.of(category);
         return ResponseEntity.ok(response);
     }
@@ -29,5 +32,13 @@ public class CategoryController {
     public ResponseEntity<Void> updateCategorySequence(@Valid @RequestBody ChangeSequenceRequest request) {
         categoryService.changeSequence(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<CategoriesResponse>> getCategories(@AuthenticationPrincipal Member member) {
+        List<CategoriesResponse> categories = categoryService.getCategories(member);
+        return ResponseEntity.ok(categories);
+
+
     }
 }

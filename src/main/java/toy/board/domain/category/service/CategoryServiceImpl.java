@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import toy.board.domain.category.dto.request.ChangeSequenceRequest;
 import toy.board.domain.category.dto.request.CreateCategoryRequest;
 import toy.board.domain.category.dto.request.IdSequenceDto;
+import toy.board.domain.category.dto.response.CategoriesResponse;
 import toy.board.domain.category.repository.CategoryRepository;
 import toy.board.global.exception.ErrorCode;
 import toy.board.global.exception.custom.BusinessException;
@@ -29,9 +30,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<CategoriesResponse> getCategories(Member member) {
+        return categoryRepository.findWithChildByMember(member).stream().map(CategoriesResponse::new).collect(Collectors.toList());
+
+    }
+
+    @Override
     public Category createCategory(Member member, CreateCategoryRequest request) {
         Category parentCategory = getParentCategory(member, request.parentId());
-        if (parentCategory.getParent() != null) throw new BusinessException(ErrorCode.CATEGORY_DEPTH_EXCEEDED);
+        if (parentCategory != null && parentCategory.getParent() != null)
+            throw new BusinessException(ErrorCode.CATEGORY_DEPTH_EXCEEDED);
         Category category = Category.of(member, parentCategory, request.name());
         return categoryRepository.save(category);
     }

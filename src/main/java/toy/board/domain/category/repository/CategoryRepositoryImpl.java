@@ -24,6 +24,11 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
+    public List<Category> findWithChildByMember(Member member) {
+        return categoryJpaRepository.findByMemberIdAndParentIsNull(member.getId());
+    }
+
+    @Override
     public Optional<Category> findByIdAndMember(Integer categoryId, Member member) {
         return categoryJpaRepository.findByIdAndMemberId(categoryId, member.getId());
     }
