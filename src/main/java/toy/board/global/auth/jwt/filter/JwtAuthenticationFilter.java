@@ -30,11 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final MemberService memberService;
 
-
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String BEARER_PREFIX = "Bearer ";
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -48,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         Integer memberId = jwtService.extractMemberId(jwt);
 
-        if (memberId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (memberId != null && !(SecurityContextHolder.getContext().getAuthentication() instanceof JwtAuthenticationToken)) {
             Optional<Member> member = memberService.findById(memberId);
 
             if (member.isPresent() && jwtService.isValid(jwt, member.get())) {
