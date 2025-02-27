@@ -26,27 +26,34 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         if (authentication.getPrincipal() instanceof CustomOidcUser oidcUser) {
             Integer id = oidcUser.getId();
             String memberId = String.valueOf(id);
-            setToken(response, memberId);
+            addAccessTokenCookie(response, memberId);
+            addLoginStateCookie(response);
 
         }
 
-        response.sendRedirect("/");
+        response.sendRedirect("http://localhost:5173/");
     }
 
-    private void setToken(HttpServletResponse response, String subject) {
+    private static void addLoginStateCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("isLoggedIn", "True");
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    private void addAccessTokenCookie(HttpServletResponse response, String subject) {
         String accessToken = jwtService.getAccessToken(subject);
-        setCookie(response, "access_token", accessToken, jwtService.getAccessTokenExpireTime());
-    }
 
-
-    private void setCookie(HttpServletResponse response, String name, String token, long maxAge) {
-        Cookie cookie = new Cookie(name, token);
+        Cookie cookie = new Cookie("access_token", accessToken);
         cookie.setHttpOnly(true); // 클라이언트 측 스크립트가 쿠키에 접근하지 못하도록 설정
         cookie.setSecure(false); // HTTPS 환경에서만 전송되도록 설정
         cookie.setPath("/"); // 쿠키가 모든 경로에서 접근 가능하도록 설정
-        cookie.setMaxAge((int) maxAge);
+        cookie.setMaxAge((int) jwtService.getAccessTokenExpireTime());
         response.addCookie(cookie);
+
     }
+
+
+
 
 
 }
