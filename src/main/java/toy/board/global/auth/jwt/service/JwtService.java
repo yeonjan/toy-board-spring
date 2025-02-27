@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Component
 public class JwtService {
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000;
+    private static final int ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000;
     //TODO: jwt decoder 이용한 인증 부분 구현하기
     private final MacAlgorithm alg = Jwts.SIG.HS256;
 
@@ -27,12 +27,12 @@ public class JwtService {
     }
 
 
-    public long getAccessTokenExpireTime() {
+    public int getAccessTokenExpireTime() {
         return ACCESS_TOKEN_EXPIRE_TIME;
     }
 
 
-    private String generateToken(String subject, long expirationTime) {
+    private String generateToken(String subject, int expirationTime) {
         return Jwts.builder()
                 .signWith(convertSecretKey(secretKey), alg)
                 .subject(subject)
