@@ -28,11 +28,12 @@ public class PostingServiceImpl implements PostingService {
     private final CategoryServiceImpl categoryService;
     private final WebScrapingService webScrapingService;
 
+    private static final Integer PAGE_SIZE = 9;
+
 
     @Override
-    public Page<PostingResponse> getPostingList(Member member, int page, Boolean isRead, Integer categoryId) {
-        PostingSearchCriteria criteria = new PostingSearchCriteria(isRead, categoryId);
-        Pageable pageable = PageRequest.of(page, 9);
+    public Page<PostingResponse> getPostingList(Member member, PostingSearchCriteria criteria) {
+        Pageable pageable = PageRequest.of(criteria.page(), PAGE_SIZE);
         Page<Posting> pageResponse = postingRepository.findAllByCriteria(member, pageable, criteria);
         return pageResponse.map(PostingResponse::new);
     }
@@ -40,6 +41,7 @@ public class PostingServiceImpl implements PostingService {
     @Override
     public Integer savePosting(Member member, SavePostingRequest requestDto) {
         Category category = categoryService.getCategory(member, requestDto.categoryId());
+        //FIXME: memo는 content에서 제외, imageUrl을 content에 추가.
         Content content = webScrapingService.getContent(requestDto.url());
         content.setMemo(requestDto.memo());
 

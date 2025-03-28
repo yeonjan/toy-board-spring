@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import toy.board.domain.posting.dto.request.PatchPostingRequest;
+import toy.board.domain.posting.dto.request.PostingSearchCriteria;
 import toy.board.domain.posting.dto.request.SavePostingRequest;
 import toy.board.domain.posting.dto.response.PostingResponse;
 import toy.board.domain.posting.service.PostingService;
@@ -55,9 +56,9 @@ public class PostingController {
     }
 
     @GetMapping()
-    public ResponseEntity<Page<PostingResponse>> getPostings(@AuthenticationPrincipal Member member, @RequestParam(required = false, defaultValue = "0", name = "page") int page,
-                                                             @RequestParam(name = "isRead") Boolean isRead, @RequestParam(name = "categoryId") Integer categoryId) {
-        Page<PostingResponse> postingList = postingService.getPostingList(member, page, isRead, categoryId);
+    public ResponseEntity<Page<PostingResponse>> getPostings(@AuthenticationPrincipal Member member,
+                                                             @ModelAttribute PostingSearchCriteria criteria) {
+        Page<PostingResponse> postingList = postingService.getPostingList(member, criteria);
         return ResponseEntity.status(HttpStatus.OK).body(postingList);
     }
 
